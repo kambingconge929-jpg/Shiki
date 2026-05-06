@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHIKI MODS | Ultimate Elite</title>
+    <title>SHIKI MODS | V12</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <style>
@@ -19,10 +19,17 @@
         textarea, input { width: 100%; background: #111; border: 1px solid var(--primary); border-radius: 8px; padding: 10px; color: #fff; font-size: 12px; margin-bottom: 10px; box-sizing: border-box; }
         .label { display: block; text-align: left; font-size: 11px; color: var(--primary); margin-bottom: 5px; font-weight: bold; text-transform: uppercase; }
         
+        /* SHIKI STYLE CARD UI */
         .store-header { width: 95%; max-width: 420px; text-align: center; background: var(--primary); color: #000; font-weight: 900; padding: 15px; border-radius: 10px; margin-bottom: 5px; text-shadow: 0 0 5px #fff; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; }
         #project-grid { width: 95%; max-width: 420px; display: none; flex-direction: column; gap: 12px; margin-top: 15px; }
-        .card { background: rgba(188, 19, 254, 0.1); border-radius: 15px; border: 1px solid var(--primary); padding: 15px; text-align: left; animation: slideIn 0.4s; }
-        .btn-dl { background: var(--primary); color: #000; padding: 8px; border-radius: 8px; text-decoration: none; display: block; text-align: center; margin-top: 10px; font-size: 12px; font-weight: bold; }
+        
+        .pmsi-card { background: rgba(188, 19, 254, 0.05); border: 1px solid rgba(188, 19, 254, 0.3); border-radius: 15px; padding: 15px; position: relative; text-align: left; animation: slideIn 0.4s; }
+        .badge-lua { background: rgba(188, 19, 254, 0.2); color: var(--primary); padding: 3px 10px; border-radius: 15px; font-size: 10px; font-weight: bold; display: inline-block; }
+        .card-name { font-size: 18px; font-weight: 900; color: #fff; margin: 10px 0 5px 0; }
+        .card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; border-top: 1px solid rgba(188, 19, 254, 0.1); padding-top: 10px; }
+        .author { color: var(--primary); font-size: 11px; font-weight: bold; }
+        .btn-dl-pmsi { background: var(--primary); color: #000; padding: 5px 12px; border-radius: 6px; text-decoration: none; font-size: 10px; font-weight: bold; }
+        
         @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
@@ -30,11 +37,11 @@
     <div class="container">
         <img src="https://cdn.discordapp.com/attachments/1403306022361235466/1501407305051275285/file_00000000bd78720bb6afdf59771ac3c3.png?ex=69fbf604&is=69faa484&hm=1117233214580a7992f48e3edbb75da66b08f6dcc3a3e8408ed64775d30bb169&" class="profile-img">
         <h1>SHIKI MODS</h1>
-        <div class="cmd-box" id="cmdOut">> KALO MAU KUNCI FILE ATAU UPLOAD MONETLOADER DI BAWAH</div>
+        <div class="cmd-box" id="cmdOut">> System Shiki V12.0 Ready...</div>
         <div class="links">
-            <a href="https://wa.me/6281315151701" class="btn">💬 ORDER JASA SHIKI</a>
+            <a href="https://wa.me/6281315151701" class="btn">💬 WhatsApp Personal</a>
             <a href="https://whatsapp.com/channel/0029Vb730uH8kyyTsZ7aO826" class="btn">📢 Saluran Shiki</a>
-            <a href="https://youtube.com/@mlanz04?si=FHUJ1THdTdPX0lUU" class="btn">📺 YouTube Official Shiki</a>
+            <a href="https://youtube.com/@mlanz04?si=FHUJ1THdTdPX0lUU" class="btn">📺 YouTube Official</a>
         </div>
     </div>
 
@@ -44,9 +51,9 @@
     <div id="project-grid"></div>
 
     <div class="section">
-        <div style="color:var(--primary); font-weight:bold; margin-bottom:15px;">🔒 LUA OBFUSCATOR V2</div>
+        <div style="color:var(--primary); font-weight:bold; margin-bottom:15px;">🔒 LUA OBFUSCATOR V2 (OLD STYLE)</div>
         <input type="file" id="obfFile" accept=".lua">
-        <textarea id="obfInput" rows="3" placeholder="Kode akan muncul di sini..."></textarea>
+        <textarea id="obfInput" rows="3" placeholder="Input kode lua..."></textarea>
         <button class="btn" onclick="obfuscateCode()" style="background:var(--primary); color:#000;">ENCRYPT & DOWNLOAD</button>
     </div>
 
@@ -68,7 +75,7 @@
             out.scrollTop = out.scrollHeight;
         }
 
-        // FUNGSI OBFUSCATOR
+        // OBFUSCATOR OLD STYLE (LUAOBFUSCATOR.COM)
         document.getElementById('obfFile').addEventListener('change', function(e) {
             const reader = new FileReader();
             reader.onload = function(e) { document.getElementById('obfInput').value = e.target.result; };
@@ -78,31 +85,24 @@
         function obfuscateCode() {
             const input = document.getElementById("obfInput").value;
             if(!input) return alert("Isi kodenya puki!");
-            const b64 = btoa(unescape(encodeURIComponent(input)));
-            const result = `-- [[ SHIKI ELITE OBF ]] --\nlocal s = "${b64}"\nlocal function d(data) local b='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/' data = string.gsub(data, '[^'..b..'=]', '') return (data:gsub('.', function(x) if (x == '=') then return '' end local r,f='', (b:find(x)-1) for i=6,1,-1 do f=f..(r%2^i-r%2^(i-1)>0 and '1' or '0') end return f end):gsub('%d%d%d%d%d%d%d%d', function(x) local c=0 for i=1,8 do c=c+(x:sub(i,i)=='1' and 2^(8-i) or 0) end return string.char(c) end)) end\nload(d(s))()`;
+            logCMD("Encrypting with Old Engine...");
+            let bytes = "";
+            for (let i = 0; i < input.length; i++) { bytes += "\\" + input.charCodeAt(i); }
+            const result = `-- [[ Obfuscated by ShikiMods Old Style ]] --\nlocal _ = load("\\108\\111\\97\\100\\40\\34${bytes}\\34\\41\\40\\41")\nif _ then _() end`;
             const blob = new Blob([result], {type: 'text/plain'});
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.href = url; a.download = "Shiki_Encrypted.lua"; a.click();
-            logCMD("Obfuscated & Downloaded.");
+            a.href = url; a.download = "Shiki_OldStyle.lua"; a.click();
+            logCMD("Done! Monetloader Friendly.");
         }
 
-        // FUNGSI TOGGLE
         function toggleStore() {
             const grid = document.getElementById("project-grid");
             const arrow = document.getElementById("arrow");
-            if (grid.style.display === "flex") {
-                grid.style.display = "none";
-                arrow.innerHTML = "▼";
-                logCMD("Folder Closed.");
-            } else {
-                grid.style.display = "flex";
-                arrow.innerHTML = "▲";
-                logCMD("Folder Opened.");
-            }
+            grid.style.display = (grid.style.display === "flex") ? "none" : "flex";
+            arrow.innerHTML = (grid.style.display === "flex") ? "▲" : "▼";
         }
 
-        // FUNGSI UPLOAD
         function uploadFile() {
             const name = document.getElementById("scriptName").value;
             const file = document.getElementById("fileInput").files[0];
@@ -110,23 +110,29 @@
             const reader = new FileReader();
             reader.onload = function(e) {
                 db.push().set({ name: name, code: e.target.result, date: new Date().toLocaleDateString() });
-                alert("Berhasil Masuk Store!");
+                alert("Upload Sukses!");
                 logCMD("Uploaded: " + name);
             };
             reader.readAsText(file);
         }
 
-        // FETCH DATA
+        // FETCH DATA - SHIKI GRID STYLE
         db.on("value", (snap) => {
             const grid = document.getElementById("project-grid");
             grid.innerHTML = "";
             snap.forEach((child) => {
                 const data = child.val();
                 const card = document.createElement("div");
-                card.className = "card";
-                card.innerHTML = `<div style="font-weight:bold; color:#fff;">${data.name}</div>
-                    <div style="font-size:10px; color:var(--primary);">${data.date}</div>
-                    <a href="data:text/plain;charset=utf-8,${encodeURIComponent(data.code)}" download="${data.name}.lua" class="btn-dl">DOWNLOAD LUA</a>`;
+                card.className = "pmsi-card";
+                card.innerHTML = `
+                    <div class="badge-lua">💻 Script Lua</div>
+                    <div class="card-name">${data.name}</div>
+                    <div style="font-size:10px; color:#888;">Updated: ${data.date}</div>
+                    <div class="card-footer">
+                        <div class="author">👤 ShikiMods</div>
+                        <a href="data:text/plain;charset=utf-8,${encodeURIComponent(data.code)}" download="${data.name}.lua" class="btn-dl-pmsi">DOWNLOAD</a>
+                    </div>
+                `;
                 grid.prepend(card);
             });
         });
