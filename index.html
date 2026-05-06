@@ -3,70 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHIKI MODS | Purple Elite</title>
+    <title>SHIKI MODS | Purple Elite V7</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <style>
         :root { --primary: #bc13fe; --bg: #0a0510; --card: rgba(25, 10, 40, 0.9); --text: #f0e6ff; }
-        body { background-color: var(--bg); color: var(--text); font-family: 'Poppins', sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; background: radial-gradient(circle at center, #2e0044 0%, #0a0510 100%); padding: 40px 10px; overflow-x: hidden; }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Poppins', sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; background: radial-gradient(circle at center, #2e0044 0%, #0a0510 100%); padding: 40px 10px; min-height: 100vh; overflow-x: hidden; }
         .container, .section { background: var(--card); backdrop-filter: blur(10px); border-radius: 20px; border: 1px solid var(--primary); width: 95%; max-width: 420px; padding: 25px; text-align: center; margin-bottom: 20px; box-sizing: border-box; box-shadow: 0 0 20px rgba(188, 19, 254, 0.2); }
         .profile-img { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--primary); box-shadow: 0 0 15px var(--primary); margin-bottom: 15px; }
         h1 { color: var(--primary); text-shadow: 0 0 10px var(--primary); margin: 0; font-size: 24px; }
         .links { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
-        .btn { background: rgba(188, 19, 254, 0.1); color: white; padding: 12px; text-decoration: none; border-radius: 10px; border: 1px solid var(--primary); font-weight: bold; transition: 0.3s; font-size: 13px; }
+        .btn { background: rgba(188, 19, 254, 0.1); color: white; padding: 12px; text-decoration: none; border-radius: 10px; border: 1px solid var(--primary); font-weight: bold; transition: 0.3s; font-size: 13px; cursor: pointer; display: block; width: 100%; box-sizing: border-box; margin-top: 5px; }
         .btn:hover { background: var(--primary); color: #fff; box-shadow: 0 0 15px var(--primary); }
 
-        /* CMD Console Style */
         .cmd-box { background: #000; border: 1px solid #444; border-radius: 8px; padding: 10px; text-align: left; font-family: 'Courier New', monospace; font-size: 11px; color: #00ff00; height: 100px; overflow-y: auto; margin: 15px 0; }
         
-        /* Obfuscator Section */
-        .obf-area { background: rgba(0,0,0,0.3); border-radius: 10px; padding: 15px; margin-top: 10px; }
         textarea { width: 100%; background: #111; border: 1px solid var(--primary); border-radius: 8px; padding: 10px; color: #fff; font-size: 12px; resize: none; margin-bottom: 10px; box-sizing: border-box; }
+        input[type="file"], input[type="text"] { width: 100%; background: #111; border: 1px solid var(--primary); border-radius: 8px; padding: 10px; color: #fff; margin-bottom: 10px; box-sizing: border-box; font-size: 12px; }
 
-        /* Grid */
         #project-grid { width: 95%; max-width: 420px; display: flex; flex-direction: column; gap: 15px; }
         .card { background: var(--card); border-radius: 15px; border: 1px solid #444; padding: 15px; text-align: left; animation: slideIn 0.4s; }
         .card-title { font-weight: bold; color: var(--primary); margin-bottom: 5px; }
         .btn-dl { background: var(--primary); color: #fff; padding: 8px; border-radius: 8px; text-decoration: none; display: block; text-align: center; margin-top: 10px; font-size: 12px; font-weight: bold; }
-
-        input[type="file"] { margin-bottom: 10px; font-size: 12px; color: var(--primary); }
+        
         @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+        .label { display: block; text-align: left; font-size: 12px; color: var(--primary); margin-bottom: 5px; font-weight: bold; }
     </style>
 </head>
 <body>
     <div class="container">
         <img src="https://cdn.discordapp.com/attachments/1403306022361235466/1501407305051275285/file_00000000bd78720bb6afdf59771ac3c3.png?ex=69fbf604&is=69faa484&hm=1117233214580a7992f48e3edbb75da66b08f6dcc3a3e8408ed64775d30bb169&" class="profile-img">
         <h1>SHIKI MODS</h1>
-        <p style="font-size:11px; color:#ccc;">Verified Android Modder | Lua Developer</p>
+        <p style="font-size:11px; color:#ccc;">WEBSITE RESMI SHIKI| FITUR DI BAWAH</p>
         
         <div class="cmd-box" id="cmdOut">
-            > System ShikiMods V6.0 Loaded...<br>
+            > System ShikiMods V7.0 Loaded...<br>
             > Waiting for command...
         </div>
 
         <div class="links">
             <a href="https://wa.me/6281315151701" class="btn">💬 Personal WhatsApp</a>
-            <a href="https://whatsapp.com/channel/0029Vb730uH8kyyTsZ7aO826" class="btn">📢 Saluran WhatsApp</a>
-            <a href="https://youtube.com/@mlanz04?si=KEOeEpFZAkD92HgE" class="btn">📺 YouTube Official</a>
+            <a href="https://whatsapp.com/channel/LinkSaluranWA" class="btn">📢 Saluran WhatsApp</a>
+            <a href="http://googleusercontent.com/youtube.com/3" class="btn">📺 YouTube Official</a>
         </div>
     </div>
 
     <div class="section">
-        <div style="color:var(--primary); font-weight:bold; margin-bottom:15px;">🛠️ LUA OBFUSCATOR</div>
-        <textarea id="obfInput" rows="4" placeholder="Paste Kode Lua Lu..."></textarea>
-        <button class="btn" onclick="obfuscateCode()" style="width:100%;">Encrypted Now!</button>
+        <div style="color:var(--primary); font-weight:bold; margin-bottom:15px;">🛠️ LUA OBFUSCATOR V2</div>
+        <span class="label">Pilih File Lua untuk di-Obsurf:</span>
+        <input type="file" id="obfFile" accept=".lua">
+        <span class="label">Atau Paste Manual:</span>
+        <textarea id="obfInput" rows="4" placeholder="Kode akan muncul di sini jika memilih file..."></textarea>
+        <button class="btn" onclick="obfuscateCode()">🔒 Encrypt Code</button>
+        <button id="dlObfBtn" class="btn" style="display:none; background:#00ff88; color:#000;">⬇️ Download Hasil Encrypt</button>
     </div>
 
     <div class="section">
-        <div style="color:var(--primary); font-weight:bold; margin-bottom:15px;">📤 UPLOAD PROJECT (.LUA)</div>
-        <input type="text" id="scriptName" placeholder="Judul Script..." style="width:100%; background:#111; border:1px solid var(--primary); padding:10px; border-radius:8px; color:#fff; margin-bottom:10px; box-sizing:border-box;">
+        <div style="color:var(--primary); font-weight:bold; margin-bottom:15px;">📤 UPLOAD PROJECT STORE</div>
+        <span class="label">Judul Project:</span>
+        <input type="text" id="scriptName" placeholder="Contoh: Auto Fish VIP">
+        <span class="label">Pilih File (.lua):</span>
         <input type="file" id="fileInput" accept=".lua">
-        <button class="btn" onclick="uploadFile()" style="width:100%; background:var(--primary); color:#000;">🚀 Upload to Store</button>
+        <button class="btn" onclick="uploadFile()" style="background:var(--primary); color:#000;">🚀 Upload to Cloud</button>
     </div>
 
+    <div class="dashboard-title" style="width:95%; max-width:420px; text-align:left; color:var(--primary); font-weight:bold; margin-bottom:10px; border-left:4px solid var(--primary); padding-left:10px;">Store Dashboard</div>
     <div id="project-grid"></div>
 
     <script>
+        // FIREBASE CONFIG
         const firebaseConfig = { databaseURL: "https://shikimods-default-rtdb.firebaseio.com" };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database().ref("scripts");
@@ -77,32 +82,60 @@
             out.scrollTop = out.scrollHeight;
         }
 
-        // FUNGSI OBFUSCATOR SEDERHANA (HEX)
+        // AUTO FILL TEXTAREA SAAT PILIH FILE OBFUSCATE
+        document.getElementById('obfFile').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('obfInput').value = e.target.result;
+                logCMD("File loaded to Obfuscator: " + file.name);
+            };
+            reader.readAsText(file);
+        });
+
+        // FUNGSI OBFUSCATOR + DOWNLOAD
         function obfuscateCode() {
             const input = document.getElementById("obfInput").value;
-            if(!input) return alert("Puki, isi kodenya!");
-            let result = "-- SHIKI OBFUSCATOR --\n";
+            if(!input) return alert("Pilih file atau paste kodenya dulu, mek!");
+            
+            logCMD("Encrypting code...");
+            let result = "-- [[ SHIKI ELITE OBFUSCATOR ]] --\n";
             result += "load(string.char(" + input.split('').map(c => c.charCodeAt(0)).join(',') + "))()";
+            
             document.getElementById("obfInput").value = result;
-            logCMD("Code Obfuscated successfully!");
+            logCMD("Encryption Complete!");
+
+            const dlBtn = document.getElementById("dlObfBtn");
+            dlBtn.style.display = "block";
+            dlBtn.onclick = function() {
+                const blob = new Blob([result], {type: 'text/plain'});
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = "obfuscated_by_shiki.lua";
+                a.click();
+                logCMD("File downloaded: obfuscated_by_shiki.lua");
+            };
         }
 
-        // FUNGSI UPLOAD PAKE FILE
+        // FUNGSI UPLOAD FILE KE STORE
         function uploadFile() {
             const name = document.getElementById("scriptName").value;
             const file = document.getElementById("fileInput").files[0];
-            if(!name || !file) return alert("Pilih file & isi nama, anjing!");
+            if(!name || !file) return alert("Isi nama & pilih file upload, anjing!");
 
             const reader = new FileReader();
             reader.onload = function(e) {
                 const content = e.target.result;
                 db.push().set({ name: name, code: content, date: new Date().toLocaleDateString() });
-                logCMD(`Uploaded: ${name}.lua`);
-                alert("Berhasil Upload, mek!");
+                logCMD(`Project Uploaded: ${name}`);
+                alert("Berhasil Upload ke Store, mek!");
             };
             reader.readAsText(file);
         }
 
+        // READ DARI DATABASE
         db.on("value", (snap) => {
             const grid = document.getElementById("project-grid");
             grid.innerHTML = "";
