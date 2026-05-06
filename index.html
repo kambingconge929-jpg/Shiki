@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHIKI MODS V1.0</title>
+    <title>SHIKI MARKET V1.0</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
@@ -39,11 +39,13 @@
         <div class="tab" onclick="switchTab('admin', this)">🛠️ ADMIN ONLY</div>
     </div>
 
-    <div id="store" class="container active"><div id="list"></div></div>
+    <div id="store" class="container active">
+        <div id="list"></div>
+    </div>
 
     <div id="social" class="container">
         <div class="form-box" style="text-align: center;">
-            <h3 style="color:var(--primary);">SOCIAL MEDIA</h3>
+            <h3 style="color:var(--primary);">MY SOCIAL MEDIA</h3>
             <a href="http://googleusercontent.com/youtube.com/5" target="_blank" class="btn btn-go" style="background:#ff0000; color:#fff;">📺 YOUTUBE CHANNEL</a>
             <a href="https://whatsapp.com/channel/0029Vb730uH8kyyTsZ7aO826" target="_blank" class="btn btn-go" style="background:#25d366; color:#fff;">📢 SALURAN WA</a>
         </div>
@@ -54,8 +56,8 @@
             <h3 style="color:var(--primary); margin:0 0 10px 0;">➕ UPLOAD MOD</h3>
             <label>Nama Mod:</label>
             <input type="text" id="name" placeholder="Contoh: Mod No Grass">
-            <label>Harga (FREE atau Nominal):</label>
-            <input type="text" id="price" placeholder="Contoh: 20k / FREE">
+            <label>Harga (Contoh: 20k / FREE):</label>
+            <input type="text" id="price" placeholder="Harga">
             <label>Foto Preview (Bukti Monet):</label>
             <input type="file" id="imageFile" accept="image/*">
             <label>Link File (Opsional):</label>
@@ -68,8 +70,7 @@
     </div>
 
     <script>
-        // --- DATA LU UDAH GUA FIX MEK ---
-        const ADMIN_PASSWORD = "shiki123"; 
+        const ADMIN_PASSWORD = "hamlanmaulana"; 
         const NOMOR_WA = "6281315151701"; 
 
         const firebaseConfig = {
@@ -77,93 +78,9 @@
             authDomain: "shiki-mods.firebaseapp.com",
             projectId: "shiki-mods",
             databaseURL: "https://shiki-mods-default-rtdb.asia-southeast1.firebasedatabase.app",
-            storageBucket: "shiki-mods.firebasestorage.app", // FIX SESUAI FOTO LU
+            storageBucket: "shiki-mods.firebasestorage.app",
             appId: "1:407754298344:web:002f0c7033e59f9f9a0a5d"
         };
 
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database().ref("shiki_market_links");
-        const storage = firebase.storage().ref();
-
-        function switchTab(id, el) {
-            if (id === 'admin') {
-                if (prompt("PASSWORD ADMIN:") !== ADMIN_PASSWORD) return alert("SALAH MEK!");
-            }
-            document.querySelectorAll('.container').forEach(c => c.classList.remove('active'));
-            document.querySelectorAll('.tab').forEach(t => t.forEach(t => t.classList.remove('active')));
-            document.getElementById(id).classList.add('active');
-            el.classList.add('active');
-        }
-
-        async function startUpload() {
-            const name = document.getElementById("name").value;
-            const price = document.getElementById("price").value;
-            const imgFile = document.getElementById("imageFile").files[0];
-            const modFile = document.getElementById("modFile").files[0];
-            const manualUrl = document.getElementById("url").value;
-            const status = document.getElementById("upload-status");
-
-            if(!name || !price) return alert("Nama & Harga wajib isi!");
-
-            status.innerText = "⏳ Sedang mengupload foto & file...";
-
-            let finalImgUrl = "";
-            let finalModUrl = manualUrl;
-
-            try {
-                if(imgFile) {
-                    const imgRef = storage.child('previews/' + Date.now() + "_" + imgFile.name);
-                    const snapImg = await imgRef.put(imgFile);
-                    finalImgUrl = await snapImg.ref.getDownloadURL();
-                }
-
-                if(modFile) {
-                    const modRef = storage.child('files/' + Date.now() + "_" + modFile.name);
-                    const snapMod = await modRef.put(modFile);
-                    finalModUrl = await snapMod.ref.getDownloadURL();
-                }
-
-                await db.push().set({
-                    name: name,
-                    price: price,
-                    img: finalImgUrl,
-                    url: finalModUrl,
-                    time: Date.now()
-                });
-
-                alert("Berhasil Terbit!");
-                location.reload();
-
-            } catch (e) {
-                console.error(e);
-                alert("GAGAL: " + e.message + " | Cek Rules Storage lu puki!");
-                status.innerText = "";
-            }
-        }
-
-        db.on("value", (snap) => {
-            const l = document.getElementById("list");
-            l.innerHTML = ""; 
-            if(!snap.exists()) return l.innerHTML = "<p style='text-align:center;'>Market Kosong...</p>";
-
-            snap.forEach((child) => {
-                const item = child.val();
-                const hargaLower = item.price.toLowerCase();
-                const isFree = (hargaLower === "free" || hargaLower === "0" || hargaLower === "gratis");
-                const btnLink = isFree ? item.url : `https://wa.me/${NOMOR_WA}?text=${encodeURIComponent('Halo Bang Shiki, mau beli Mod: *'+item.name+'* seharga *'+item.price+'*')}`;
-                const btnTeks = isFree ? "🔗 AMBIL MOD (FREE)" : "💳 BELI SEKARANG";
-
-                l.innerHTML = `
-                    <div class="item-card">
-                        ${item.img ? `<img src="${item.img}" class="preview-img">` : ''}
-                        <div class="card-body">
-                            <div style="font-weight:900; font-size:18px;">${item.name}</div>
-                            <div class="price">${item.price}</div>
-                            <a href="${btnLink}" target="_blank" class="btn btn-go">${btnTeks}</a>
-                        </div>
-                    </div>` + l.innerHTML;
-            });
-        });
-    </script>
-</body>
-</html>
+        firebase.initializeApp
+        
