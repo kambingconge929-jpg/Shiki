@@ -3,146 +3,166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHIKI MODS | V1.1.6 ALL-FILE</title>
+    <title>SHIKI HUB | V1.0 FINAL</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #bc13fe; --bg: #0a0510; --card: rgba(25, 10, 40, 0.95); --text: #f0e6ff; }
-        body { background-color: var(--bg); color: var(--text); font-family: 'Poppins', sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; background: radial-gradient(circle at center, #2e0044 0%, #0a0510 100%); padding: 40px 10px; min-height: 100vh; overflow-x: hidden; }
-        
-        .container, .section { background: var(--card); backdrop-filter: blur(15px); border-radius: 20px; border: 1px solid var(--primary); width: 95%; max-width: 420px; padding: 25px; text-align: center; margin-bottom: 20px; box-sizing: border-box; box-shadow: 0 0 25px rgba(188, 19, 254, 0.3); }
-        .profile-img { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--primary); box-shadow: 0 0 15px var(--primary); margin-bottom: 15px; object-fit: cover; }
-        h1 { color: var(--primary); text-shadow: 0 0 10px var(--primary); margin: 0; font-size: 24px; letter-spacing: 2px; }
-        
-        .links { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
-        .btn { background: rgba(188, 19, 254, 0.1); color: white; padding: 12px; text-decoration: none; border-radius: 10px; border: 1px solid var(--primary); font-weight: bold; transition: 0.3s; font-size: 13px; cursor: pointer; display: block; width: 100%; box-sizing: border-box; text-align: center; }
-        .btn:hover { background: var(--primary); color: #000; box-shadow: 0 0 15px var(--primary); transform: scale(1.02); }
-        
-        .cmd-box { background: #000; border: 1px solid #444; border-radius: 8px; padding: 10px; text-align: left; font-family: 'Courier New', monospace; font-size: 11px; color: #00ff00; height: 80px; overflow-y: auto; margin: 15px 0; border-left: 3px solid var(--primary); }
-        textarea, input { width: 100%; background: #111; border: 1px solid var(--primary); border-radius: 8px; padding: 10px; color: #fff; font-size: 12px; margin-bottom: 10px; box-sizing: border-box; }
-
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(15px); z-index: 999; flex-direction: column; align-items: center; padding-top: 50px; overflow-y: auto; }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; width: 95%; max-width: 420px; margin-bottom: 25px; padding: 0 10px; }
-        .close-btn { background: var(--primary); color: #000; border: none; padding: 8px 15px; border-radius: 8px; font-weight: 900; cursor: pointer; }
-
-        #project-grid { width: 95%; max-width: 420px; display: flex; flex-direction: column; gap: 15px; }
-        .shiki-card { background: rgba(188, 19, 254, 0.1); border: 1px solid var(--primary); border-radius: 20px; padding: 20px; text-align: left; position: relative; border-left: 4px solid var(--primary); }
-        .badge-shiki { background: rgba(188, 19, 254, 0.2); color: var(--primary); padding: 5px 12px; border-radius: 20px; font-size: 10px; font-weight: bold; border: 1px solid var(--primary); margin-bottom: 10px; display: inline-block; }
-        .card-name { font-size: 16px; font-weight: 900; color: #fff; margin-bottom: 5px; word-break: break-all; }
-        .btn-dl-shiki { background: var(--primary); color: #000; padding: 8px 18px; border-radius: 8px; text-decoration: none; font-size: 11px; font-weight: bold; float: right; margin-top: -10px; }
-
-        .store-trigger { width: 95%; max-width: 420px; background: var(--primary); color: #000; font-weight: 900; padding: 15px; border-radius: 12px; margin-bottom: 20px; cursor: pointer; border: none; font-size: 14px; text-transform: uppercase; }
+        :root { --primary: #bc13fe; --bg: #050208; --card: rgba(20, 10, 30, 0.9); --gold: #ffd700; }
+        body { background: var(--bg); color: #fff; font-family: 'Poppins', sans-serif; margin: 0; padding: 20px 10px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .header h1 { font-family: 'Orbitron', sans-serif; font-size: 28px; color: var(--primary); text-shadow: 0 0 15px var(--primary); margin: 0; text-align: center; }
+        .nav-tabs { display: flex; gap: 10px; margin: 20px 0; width: 100%; max-width: 450px; }
+        .tab { flex: 1; padding: 12px; text-align: center; background: var(--card); border-radius: 10px; cursor: pointer; font-weight: bold; border: 1px solid #333; transition: 0.3s; }
+        .tab.active { background: var(--primary); color: #000; border-color: var(--primary); box-shadow: 0 0 10px var(--primary); }
+        .container { width: 100%; max-width: 450px; display: none; }
+        .container.active { display: block; }
+        .item-card { background: var(--card); border-radius: 15px; border-left: 5px solid var(--primary); padding: 18px; margin-bottom: 15px; border-top: 1px solid #222; }
+        .price { color: var(--gold); font-weight: 900; margin: 5px 0; }
+        .btn-action { display: block; width: 100%; padding: 12px; text-align: center; border-radius: 8px; text-decoration: none; font-weight: 900; margin-top: 10px; border: none; cursor: pointer; text-transform: uppercase; }
+        .btn-free { background: var(--primary); color: #000; }
+        .btn-buy { background: #fff; color: #000; }
+        .form-box { background: var(--card); padding: 20px; border-radius: 15px; border: 1px dashed var(--primary); }
+        input, select { width: 100%; padding: 12px; margin-bottom: 12px; background: #111; border: 1px solid #333; color: #fff; border-radius: 8px; box-sizing: border-box; }
+        .progress-bar { width: 100%; background: #222; border-radius: 10px; height: 12px; margin: 10px 0; display: none; overflow: hidden; }
+        #pFill { height: 100%; background: linear-gradient(90deg, var(--primary), #fff); width: 0%; transition: 0.2s; }
+        .log { background: #000; color: #0f0; font-family: monospace; font-size: 10px; padding: 10px; border-radius: 5px; height: 50px; overflow-y: auto; margin-bottom: 15px; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <img src="https://cdn.discordapp.com/attachments/1403306022361235466/1501407305051275285/file_00000000bd78720bb6afdf59771ac3c3.png?ex=69fbf604&is=69faa484&hm=1117233214580a7992f48e3edbb75da66b08f6dcc3a3e8408ed64775d30bb169&" class="profile-img">
-        <h1>SHIKI MODS</h1>
-        <div class="cmd-box" id="cmdOut">> Initializing All-File System...</div>
-        <div class="links">
-            <a href="https://wa.me/6281315151701" class="btn">💬 WhatsApp Personal</a>
-            <a href="https://whatsapp.com/channel/0029Vb730uH8kyyTsZ7aO826" class="btn">📢 Saluran Shiki</a>
-            <a href="https://youtube.com/@mlanz04?si=FHUJ1THdTdPX0lUU" class="btn">📺 YouTube Official</a>
+    <div class="header"><h1>SHIKI HUB V16</h1></div>
+
+    <div class="nav-tabs">
+        <div class="tab active" onclick="switchTab('store', this)">🛒 STORE</div>
+        <div class="tab" onclick="switchTab('admin', this)">🛡️ SELLER</div>
+    </div>
+
+    <div id="store" class="container active">
+        <div id="item-list"></div>
+    </div>
+
+    <div id="admin" class="container">
+        <div class="log" id="logBox">> Shiki Engine v16 Ready...</div>
+        <div class="form-box">
+            <h3 style="color:var(--primary); margin:0 0 15px 0;">📤 UPLOAD PROJECT (MAX 500MB)</h3>
+            <input type="text" id="itemName" placeholder="Nama Script/Mod">
+            <input type="number" id="itemPrice" placeholder="Harga (0 = Gratis)">
+            <select id="itemCategory">
+                <option value="free">FREE DOWNLOAD</option>
+                <option value="paid">PREMIUM (PAID)</option>
+            </select>
+            <input type="file" id="fileInput">
+            <div class="progress-bar" id="pBar"><div id="pFill"></div></div>
+            <button class="btn-action btn-free" id="upBtn" onclick="uploadProcess()">🚀 PUBLISH TO HUB</button>
         </div>
-    </div>
-
-    <button class="store-trigger" onclick="openStore()">📁 KUMPULAN MONETLOADER SHIKI</button>
-
-    <div id="storeModal" class="modal-overlay">
-        <div class="modal-header">
-            <div style="font-weight: 900; color: var(--primary); font-size: 18px;">👑 SHIKI STORE</div>
-            <button class="close-btn" onclick="closeStore()">X CLOSE</button>
-        </div>
-        <div id="project-grid"></div>
-    </div>
-
-    <div class="section">
-        <div style="color:var(--primary); font-weight:bold; margin-bottom:15px;">🔒 ULTIMATE OBFUSCATOR (SAFE ENGINE)</div>
-        <input type="file" id="obfFile" accept=".lua">
-        <textarea id="obfInput" rows="3" placeholder="Input kode Lua..."></textarea>
-        <button class="btn" onclick="obfuscateCode()" style="background:var(--primary); color:#000;">ENCRYPT & DOWNLOAD</button>
-    </div>
-
-    <div class="section" style="border-style: dashed;">
-        <div style="color:var(--primary); font-weight:bold; margin-bottom:15px;">📤 UPLOAD FILE (SUPPORT ZIP, LUA, DLL)</div>
-        <input type="text" id="scriptName" placeholder="Nama Script/Project...">
-        <input type="file" id="fileInput"> <button class="btn" onclick="uploadFile()" style="background:var(--primary); color:#000;">🚀 UPLOAD SEKARANG</button>
     </div>
 
     <script>
-        const firebaseConfig = { databaseURL: "https://shikimods-default-rtdb.firebaseio.com" };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database().ref("scripts");
+        // CONFIG TERBARU DARI LU MEK!
+        const firebaseConfig = {
+            apiKey: "AIzaSyBrcjH0HfMDAsjaFZkXodZJtEXegbD1R9w",
+            authDomain: "shiki-mods.firebaseapp.com",
+            projectId: "shiki-mods",
+            storageBucket: "shiki-mods.firebasestorage.app", // UPDATED!
+            messagingSenderId: "407754298344",
+            appId: "1:407754298344:web:9ea763e4052849829a0a5d",
+            measurementId: "G-N87DKRBNPW"
+        };
+        
+        // Initialize Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        
+        const db = firebase.database().ref("shiki_v16_market");
+        const storage = firebase.storage().ref("files_v16");
 
-        function logCMD(msg) {
-            const out = document.getElementById("cmdOut");
-            out.innerHTML += `<br>> ${msg}`;
-            out.scrollTop = out.scrollHeight;
+        function switchTab(id, el) {
+            document.querySelectorAll('.container').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            el.classList.add('active');
         }
 
-        function openStore() { document.getElementById("storeModal").style.display = "flex"; document.body.style.overflow = "hidden"; logCMD("Viewing Shiki Store..."); }
-        function closeStore() { document.getElementById("storeModal").style.display = "none"; document.body.style.overflow = "auto"; }
-
-        function obfuscateCode() {
-            const input = document.getElementById("obfInput").value;
-            if(!input) return alert("Isi kodenya puki!");
-            let codes = [];
-            for (let i = 0; i < input.length; i++) { codes.push(input.charCodeAt(i)); }
-            const result = `-- [[ PROTECTED BY SHIKI MODS ]] --\nlocal _v = {${codes.join(',')}}\nlocal _s = ''\nfor i=1, #_v do _s = _s .. string.char(_v[i]) end\nlocal _f = load(_s)\nif _f then _f() end`;
-            const blob = new Blob([result], {type: 'text/plain'});
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url; a.download = "Shiki_Project.lua"; a.click();
+        function log(msg) {
+            const lb = document.getElementById("logBox");
+            lb.innerHTML += `<br>> ${msg}`;
+            lb.scrollTop = lb.scrollHeight;
         }
 
-        // --- GLOBAL UPLOAD (SUPPORT ALL FILES) ---
-        function uploadFile() {
-            const nameInput = document.getElementById("scriptName");
-            const fileInput = document.getElementById("fileInput");
-            const file = fileInput.files[0];
-            
-            if(!nameInput.value || !file) return alert("Puki ayam, lengkapin!");
-            
-            logCMD("Processing file: " + file.name);
-            const reader = new FileReader();
-            
-            // Pake DataURL biar bisa handle Binary (ZIP, APK, dll)
-            reader.onload = function(e) {
-                db.push().set({
-                    name: nameInput.value,
-                    fileName: file.name,
-                    data: e.target.result, // Ini isinya Base64
-                    date: new Date().toLocaleDateString()
-                }).then(() => {
-                    logCMD("Upload Success: " + file.name);
-                    alert("File berhasil masuk Store!");
-                    nameInput.value = "";
-                    fileInput.value = "";
-                });
-            };
-            reader.readAsDataURL(file);
+        function uploadProcess() {
+            const name = document.getElementById("itemName").value;
+            const price = document.getElementById("itemPrice").value;
+            const cat = document.getElementById("itemCategory").value;
+            const file = document.getElementById("fileInput").files[0];
+            const btn = document.getElementById("upBtn");
+            const pBar = document.getElementById("pBar");
+            const pFill = document.getElementById("pFill");
+
+            if(!name || !file) return alert("Puki ayam, isi dulu!");
+            if(file.size > 500 * 1024 * 1024) return alert("Limit 500MB!");
+
+            btn.disabled = true;
+            pBar.style.display = "block";
+            log("Starting upload: " + file.name);
+
+            const fileRef = storage.child(Date.now() + "_" + file.name);
+            const task = fileRef.put(file);
+
+            task.on('state_changed', 
+                (snap) => {
+                    let prog = (snap.bytesTransferred / snap.totalBytes) * 100;
+                    pFill.style.width = prog + "%";
+                    log("Uploading: " + Math.round(prog) + "%");
+                },
+                (err) => {
+                    log("Error: " + err.message);
+                    alert("Gagal! Cek Rules Storage lu.");
+                    btn.disabled = false;
+                },
+                () => {
+                    task.snapshot.ref.getDownloadURL().then((url) => {
+                        db.push().set({
+                            name: name,
+                            price: price == 0 ? "FREE" : "Rp " + parseInt(price).toLocaleString(),
+                            category: cat,
+                            fileUrl: url,
+                            fileName: file.name,
+                            timestamp: Date.now()
+                        }).then(() => {
+                            alert("Publish Berhasil!");
+                            location.reload();
+                        });
+                    });
+                }
+            );
         }
 
-        // --- REAL-TIME DISPLAY ---
+        // LOAD DATA STORE
         db.on("value", (snap) => {
-            const grid = document.getElementById("project-grid");
-            grid.innerHTML = ""; 
-            if(!snap.exists()) return grid.innerHTML = "<div style='color:#888;'>Kosong nyet...</div>";
+            const list = document.getElementById("item-list");
+            list.innerHTML = "";
+            if(!snap.exists()) list.innerHTML = "<p style='text-align:center; opacity:0.5;'>Market Kosong...</p>";
 
             snap.forEach((child) => {
                 const item = child.val();
+                const isPaid = item.category === "paid";
+                
+                const action = isPaid 
+                    ? `<a href="https://wa.me/6281315151701?text=Beli+${encodeURIComponent(item.name)}+(${item.price})" class="btn-action btn-buy">🛒 BUY NOW</a>`
+                    : `<a href="${item.fileUrl}" download="${item.fileName}" class="btn-action btn-free">⬇️ DOWNLOAD</a>`;
+
                 const card = document.createElement("div");
-                card.className = "shiki-card";
+                card.className = "item-card";
                 card.innerHTML = `
-                    <div class="badge-shiki">💎 ALL-FILE SUPPORT</div>
-                    <a href="${item.data}" download="${item.fileName || 'file.zip'}" class="btn-dl-shiki">DOWNLOAD</a>
-                    <div class="card-name">${item.name}</div>
-                    <div style="font-size:10px; color:#aaa;">File: ${item.fileName || 'Unknown'} | ${item.date}</div>
+                    <div style="font-weight:900; font-size:18px;">${item.name}</div>
+                    <div class="price">${item.price}</div>
+                    ${action}
                 `;
-                grid.prepend(card);
+                list.prepend(card);
             });
-            logCMD("Store List Synchronized.");
+            log("Store synchronized.");
         });
     </script>
 </body>
