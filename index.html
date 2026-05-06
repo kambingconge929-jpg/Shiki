@@ -23,17 +23,16 @@
 
         /* FULLSCREEN MODAL UI */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(15px); z-index: 999; flex-direction: column; align-items: center; padding-top: 50px; overflow-y: auto; }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; width: 95%; max-width: 420px; margin-bottom: 25px; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; width: 95%; max-width: 420px; margin-bottom: 25px; padding: 0 10px; }
         .close-btn { background: var(--primary); color: #000; border: none; padding: 8px 15px; border-radius: 8px; font-weight: 900; cursor: pointer; }
 
         #project-grid { width: 95%; max-width: 420px; display: flex; flex-direction: column; gap: 15px; }
-        .shiki-card { background: rgba(188, 19, 254, 0.1); border: 1px solid var(--primary); border-radius: 20px; padding: 20px; text-align: left; position: relative; }
+        .shiki-card { background: rgba(188, 19, 254, 0.1); border: 1px solid var(--primary); border-radius: 20px; padding: 20px; text-align: left; position: relative; border-left: 4px solid var(--primary); }
         .badge-shiki { background: rgba(188, 19, 254, 0.2); color: var(--primary); padding: 5px 12px; border-radius: 20px; font-size: 10px; font-weight: bold; border: 1px solid var(--primary); margin-bottom: 10px; display: inline-block; }
         .card-name { font-size: 18px; font-weight: 900; color: #fff; margin-bottom: 5px; }
-        .author-name { color: var(--primary); font-size: 12px; font-weight: bold; }
-        .btn-dl-shiki { background: var(--primary); color: #000; padding: 8px 18px; border-radius: 8px; text-decoration: none; font-size: 11px; font-weight: bold; float: right; margin-top: -15px; }
+        .btn-dl-shiki { background: var(--primary); color: #000; padding: 8px 18px; border-radius: 8px; text-decoration: none; font-size: 11px; font-weight: bold; float: right; margin-top: -15px; box-shadow: 0 0 10px rgba(188,19,254,0.3); }
 
-        .store-trigger { width: 95%; max-width: 420px; background: var(--primary); color: #000; font-weight: 900; padding: 15px; border-radius: 12px; margin-bottom: 20px; cursor: pointer; border: none; font-size: 14px; }
+        .store-trigger { width: 95%; max-width: 420px; background: var(--primary); color: #000; font-weight: 900; padding: 15px; border-radius: 12px; margin-bottom: 20px; cursor: pointer; border: none; font-size: 14px; text-transform: uppercase; }
     </style>
 </head>
 <body>
@@ -41,7 +40,7 @@
     <div class="container">
         <img src="https://cdn.discordapp.com/attachments/1403306022361235466/1501407305051275285/file_00000000bd78720bb6afdf59771ac3c3.png?ex=69fbf604&is=69faa484&hm=1117233214580a7992f48e3edbb75da66b08f6dcc3a3e8408ed64775d30bb169&" class="profile-img">
         <h1>SHIKI MODS</h1>
-        <div class="cmd-box" id="cmdOut">> System Shiki V13.3 Final...</div>
+        <div class="cmd-box" id="cmdOut">> System Ready...</div>
         <div class="links">
             <a href="https://wa.me/6281315151701" class="btn">💬 WhatsApp Personal</a>
             <a href="https://whatsapp.com/channel/0029Vb730uH8kyyTsZ7aO826" class="btn">📢 Saluran Shiki</a>
@@ -60,7 +59,7 @@
     </div>
 
     <div class="section">
-        <div style="color:var(--primary); font-weight:bold; margin-bottom:15px;">🔒 STABLE LUA OBFUSCATOR</div>
+        <div style="color:var(--primary); font-weight:bold; margin-bottom:15px;">🔒 ULTIMATE OBFUSCATOR (FIX COMPLEX)</div>
         <input type="file" id="obfFile" accept=".lua">
         <textarea id="obfInput" rows="3" placeholder="Input kode Lua..."></textarea>
         <button class="btn" onclick="obfuscateCode()" style="background:var(--primary); color:#000;">ENCRYPT & DOWNLOAD</button>
@@ -84,67 +83,78 @@
             out.scrollTop = out.scrollHeight;
         }
 
-        // MODAL FUNCTIONS
         function openStore() {
             document.getElementById("storeModal").style.display = "flex";
             document.body.style.overflow = "hidden";
-            logCMD("Opening Shiki Store UI...");
+            logCMD("Store UI Activated.");
         }
         function closeStore() {
             document.getElementById("storeModal").style.display = "none";
             document.body.style.overflow = "auto";
         }
 
-        // STABLE OBFUSCATOR ENGINE
-        document.getElementById('obfFile').addEventListener('change', function(e) {
-            const reader = new FileReader();
-            reader.onload = function(e) { document.getElementById('obfInput').value = e.target.result; };
-            reader.readAsText(e.target.files[0]);
-        });
-
+        // OBFUSCATOR FIX COMPLEX
         function obfuscateCode() {
             const input = document.getElementById("obfInput").value;
-            if(!input) return alert("Puki ayam, isi kodenya!");
-            logCMD("Encrypting: Stable Shiki Mode...");
+            if(!input) return alert("Isi kodenya nyet!");
             let codes = [];
             for (let i = 0; i < input.length; i++) { codes.push(input.charCodeAt(i)); }
-            const result = `-- [[ PROTECTED BY SHIKI MODS ]] --\nlocal _ = assert(load(string.char(${codes.join(',')})));\nif _ then pcall(_); end`;
+            const result = `-- [[ PROTECTED BY SHIKI MODS ]] --\nlocal _v = {${codes.join(',')}}\nlocal _s = ''\nfor i=1, #_v do _s = _s .. string.char(_v[i]) end\nlocal _f = load(_s)\nif _f then _f() end`;
             const blob = new Blob([result], {type: 'text/plain'});
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.href = url; a.download = "Shiki_Final.lua"; a.click();
-            logCMD("Encryption Complete & Safe.");
+            a.href = url; a.download = "Shiki_Enc.lua"; a.click();
+            logCMD("Obfuscation Done.");
         }
 
+        // UPLOAD FIX (AUTO REFRESH UI)
         function uploadFile() {
-            const name = document.getElementById("scriptName").value;
-            const file = document.getElementById("fileInput").files[0];
-            if(!name || !file) return alert("Data gak lengkap!");
+            const nameInput = document.getElementById("scriptName");
+            const fileInput = document.getElementById("fileInput");
+            
+            if(!nameInput.value || !fileInput.files[0]) return alert("Data dongo, lengkapin!");
+            
             const reader = new FileReader();
             reader.onload = function(e) {
-                db.push().set({ name: name, code: e.target.result, date: new Date().toLocaleDateString() });
-                alert("Upload Berhasil!");
+                db.push().set({
+                    name: nameInput.value,
+                    code: e.target.result,
+                    date: new Date().toLocaleDateString()
+                }).then(() => {
+                    logCMD("Successfully added: " + nameInput.value);
+                    alert("Berhasil masuk kumpulan Shiki!");
+                    nameInput.value = ""; // Bersihin input
+                    fileInput.value = ""; // Bersihin input
+                });
             };
-            reader.readAsText(file);
+            reader.readAsText(fileInput.files[0]);
         }
 
-        // RENDER CARDS TO MODAL
+        // REAL-TIME LISTENING (INI YANG BIKIN AUTO MUNCUL)
         db.on("value", (snap) => {
             const grid = document.getElementById("project-grid");
-            grid.innerHTML = "";
+            grid.innerHTML = ""; // Hapus list lama
+            
+            if(!snap.exists()) {
+                grid.innerHTML = "<div style='color:#888;'>Belum ada script di-upload...</div>";
+                return;
+            }
+
             snap.forEach((child) => {
                 const data = child.val();
                 const card = document.createElement("div");
                 card.className = "shiki-card";
                 card.innerHTML = `
-                    <div class="badge-shiki">💎 SHIKI EXCLUSIVE</div>
-                    <a href="data:text/plain;charset=utf-8,${encodeURIComponent(data.code)}" download="${data.name}.lua" class="btn-dl-shiki">DL</a>
+                    <div class="badge-shiki">💎 SHIKI SCRIPT</div>
+                    <a href="data:text/plain;charset=utf-8,${encodeURIComponent(data.code)}" download="${data.name}.lua" class="btn-dl-shiki">GET</a>
                     <div class="card-name">${data.name}</div>
-                    <div class="author-name">👑 AUTHOR: SHIKI | ${data.date}</div>
+                    <div style="font-size:10px; color:#aaa;">Author: SHIKI | Released: ${data.date}</div>
                 `;
-                grid.prepend(card);
+                grid.prepend(card); // Yang baru di atas
             });
+            logCMD("Store List Updated.");
         });
     </script>
 </body>
 </html>
+
