@@ -3,77 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daffvdm | Official Profile</title>
+    <title>SHIKI MODS | Official</title>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <style>
         :root {
-            --primary: #ff4d4d;
-            --bg: #0a0a0a;
-            --card: #151515;
+            --primary: #00ff88; /* Warna Hijau Glow Cyberpunk */
+            --bg: #050505;
+            --card: rgba(20, 20, 20, 0.8);
             --text: #ffffff;
         }
         body {
             background-color: var(--bg);
             color: var(--text);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            margin: 0;
+            overflow: hidden;
+            background: radial-gradient(circle at center, #004422 0%, #050505 100%);
+        }
+        /* Efek Partikel Sederhana */
+        .bg-animation {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+            opacity: 0.2;
         }
         .container {
             background: var(--card);
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            padding: 40px 20px;
+            border-radius: 25px;
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.2);
             text-align: center;
-            width: 90%;
-            max-width: 400px;
-            border: 1px solid #333;
+            width: 85%;
+            max-width: 380px;
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            animation: fadeIn 1.5s ease;
         }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
         .profile-img {
-            width: 100px;
-            height: 100px;
+            width: 110px;
+            height: 110px;
             border-radius: 50%;
             border: 3px solid var(--primary);
-            margin-bottom: 15px;
+            box-shadow: 0 0 15px var(--primary);
+            object-fit: cover;
+            margin-bottom: 20px;
         }
-        h1 { margin: 10px 0; font-size: 24px; color: var(--primary); }
-        p { color: #aaa; font-size: 14px; margin-bottom: 20px; }
-        .links { display: flex; flex-direction: column; gap: 10px; }
+        h1 { margin: 10px 0; font-size: 28px; letter-spacing: 2px; color: var(--primary); text-shadow: 0 0 10px var(--primary); }
+        p { color: #ccc; font-size: 13px; margin-bottom: 30px; line-height: 1.6; }
+        
+        .links { display: flex; flex-direction: column; gap: 15px; }
         .btn {
-            background: #222;
+            background: rgba(255, 255, 255, 0.05);
             color: white;
-            padding: 12px;
+            padding: 14px;
             text-decoration: none;
-            border-radius: 10px;
-            transition: 0.3s;
-            border: 1px solid #444;
-            font-weight: bold;
+            border-radius: 12px;
+            transition: 0.4s;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
         .btn:hover {
             background: var(--primary);
-            transform: translateY(-3px);
-            border-color: var(--primary);
+            color: #000;
+            box-shadow: 0 0 20px var(--primary);
+            transform: scale(1.05);
         }
-        .footer { margin-top: 25px; font-size: 10px; color: #555; }
+        .footer { margin-top: 30px; font-size: 11px; color: #666; letter-spacing: 1px; }
     </style>
 </head>
 <body>
+    <div class="bg-animation"></div>
     <div class="container">
-        <img src="https://via.placeholder.com/150" alt="P" class="profile-img">
+        <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Shiki" alt="Shiki Mods" class="profile-img">
+        
         <h1>SHIKI MODS</h1>
-        <p>Expert Script Developer | Android Modder<br>Anti-Plagiarism & Real Coder</p>
+        <p>Verified Developer | Android Modder<br>Destroying Plagiarism One Code at a Time</p>
         
         <div class="links">
-            <a href="#" class="btn">🚀 My Projects (GitHub)</a>
-            <a href="#" class="btn">📱 WhatsApp Contact</a>
-            <a href="#" class="btn">📹 YouTube Channel</a>
-            <a href="#" class="btn">💾 Download My Scripts</a>
+            <a href="https://github.com/kambingconge929-jpg" class="btn">📂 My Projects</a>
+            <a href="https://wa.me/081315151701" class="btn">💬 WhatsApp Me</a>
+            <a href="#" class="btn">📺 YouTube Channel</a>
+            <a href="#" class="btn">🛠 Tools & Scripts</a>
         </div>
 
         <div class="footer">
-            © 2026 SHIKIMODS V1.0 - ALL RIGHTS RESERVED
+            © 2026 SHIKIMODS ECOSYSTEM
         </div>
     </div>
 </body>
