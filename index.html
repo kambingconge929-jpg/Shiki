@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHIKI MARKET x SAFELINK</title>
+    <title>SHIKI MARKET | V23.0</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #00ff88; --bg: #050208; --card: rgba(15, 15, 25, 0.95); --gold: #ffd700; }
         body { background: var(--bg); color: #fff; font-family: 'Poppins', sans-serif; margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-        .header h1 { font-family: 'Orbitron', sans-serif; font-size: 26px; color: var(--primary); text-shadow: 0 0 10px var(--primary); margin: 25px 0; text-align: center; }
+        .header h1 { font-family: 'Orbitron', sans-serif; font-size: 26px; color: var(--primary); text-shadow: 0 0 10px var(--primary); margin: 25px 0; }
         .nav-tabs { display: flex; gap: 10px; margin-bottom: 25px; width: 100%; max-width: 400px; }
         .tab { flex: 1; padding: 14px; text-align: center; background: var(--card); border-radius: 10px; cursor: pointer; border: 1px solid #333; font-weight: bold; }
         .tab.active { background: var(--primary); color: #000; box-shadow: 0 0 15px var(--primary); }
@@ -18,7 +18,7 @@
         .container.active { display: block; }
         .item-card { background: var(--card); border-radius: 15px; padding: 20px; margin-bottom: 15px; border-left: 5px solid var(--primary); border-top: 1px solid #222; }
         .price { color: var(--gold); font-weight: 900; margin: 8px 0; font-size: 18px; }
-        .btn { display: block; width: 100%; padding: 12px; text-align: center; border-radius: 8px; text-decoration: none; font-weight: 900; margin-top: 10px; cursor: pointer; border: none; text-transform: uppercase; }
+        .btn { display: block; width: 100%; padding: 12px; text-align: center; border-radius: 8px; text-decoration: none; font-weight: 900; margin-top: 10px; cursor: pointer; border: none; }
         .btn-go { background: var(--primary); color: #000; }
         .form-box { background: var(--card); padding: 25px; border-radius: 15px; border: 1px dashed var(--primary); }
         input { width: 100%; padding: 12px; margin-bottom: 15px; background: #000; border: 1px solid #333; color: #fff; border-radius: 8px; box-sizing: border-box; }
@@ -30,29 +30,24 @@
 
     <div class="nav-tabs">
         <div class="tab active" onclick="switchTab('store', this)">🛒 MARKET</div>
-        <div class="tab" onclick="switchTab('admin', this)">🛠️ ADD LINK</div>
+        <div class="tab" onclick="switchTab('admin', this)">🛠️ ADMIN</div>
     </div>
 
-    <div id="store" class="container active">
-        <div id="list"></div>
-    </div>
+    <div id="store" class="container active"><div id="list"></div></div>
 
     <div id="admin" class="container">
         <div class="form-box">
-            <h3 style="color:var(--primary); margin:0 0 15px 0;">➕ ADD WITH SAFELINK</h3>
+            <h3 style="color:var(--primary); margin:0 0 15px 0;">➕ ADD NEW MOD</h3>
             <input type="text" id="name" placeholder="Nama Script / Mod">
             <input type="text" id="url" placeholder="Original Link (Mediafire/Drive)">
             <input type="text" id="price" placeholder="Harga (misal: FREE)">
-            <button class="btn btn-go" onclick="addLink()">🚀 PUBLISH NOW</button>
+            <button class="btn btn-go" onclick="addLink()">🚀 PUBLISH LINK</button>
         </div>
     </div>
 
     <script>
-        // --- SETTING SAFELINKU LU MEK! ---
-        const safelinkConfig = {
-            api: "625625625625625625625", // GANTI PAKE API KEY SAFELINKU LU!
-            memberId: "12345" // GANTI PAKE ID MEMBER LU!
-        };
+        // --- CONFIG SAFELINK ---
+        const safelinkApi = "ISI_API_KEY_LU_DISINI"; 
 
         const firebaseConfig = {
             apiKey: "AIzaSyBrcjH0HfMDAsjaFZkXodZJtEXegbD1R9w",
@@ -72,43 +67,39 @@
             el.classList.add('active');
         }
 
-        // FUNGSI BUAT JADIIN LINK SAFELINKU
-        function convertToSafelink(originalUrl) {
-            // Ini format standar link Safelinku
-            return `https://safelinku.com/st?api=${safelinkConfig.api}&url=${encodeURIComponent(originalUrl)}`;
-        }
-
         function addLink() {
             const n = document.getElementById("name").value;
             const u = document.getElementById("url").value;
             const p = document.getElementById("price").value;
+            if(!n || !u || !p) return alert("Isi semua mek!");
 
-            if(!n || !u || !p) return alert("Puki ayam, isi semua!");
+            // Link otomatis jadi Safelinku
+            const safeUrl = `https://safelinku.com/st?api=${safelinkApi}&url=${encodeURIComponent(u)}`;
 
-            // Link otomatis di-convert sebelum masuk database
-            const safeUrl = convertToSafelink(u);
-
-            db.push().set({
-                name: n,
-                url: safeUrl, // Yang disimpen udah link safelinku
-                price: p
-            }).then(() => {
-                alert("Berhasil! Link sudah otomatis jadi Safelinku.");
-                location.reload();
-            });
+            db.push().set({ name: n, url: safeUrl, price: p })
+            .then(() => { alert("Berhasil Terbit!"); location.reload(); });
         }
 
+        // TAMPILAN ANTI-DOUBLE
         db.on("value", (snap) => {
             const l = document.getElementById("list");
-            l.innerHTML = "";
+            l.innerHTML = ""; // BERSIHIN LAYAR DULU MEK!
+            
+            if(!snap.exists()) {
+                l.innerHTML = "<p style='text-align:center; opacity:0.5;'>Market Kosong...</p>";
+                return;
+            }
+
             snap.forEach((child) => {
                 const item = child.val();
-                l.innerHTML += `
-                    <div class="item-card">
-                        <div style="font-weight:900; font-size:20px;">${item.name}</div>
-                        <div class="price">${item.price}</div>
-                        <a href="${item.url}" target="_blank" class="btn btn-go">🔗 AMBIL MOD</a>
-                    </div>`;
+                const card = document.createElement("div");
+                card.className = "item-card";
+                card.innerHTML = `
+                    <div style="font-weight:900; font-size:20px;">${item.name}</div>
+                    <div class="price">${item.price}</div>
+                    <a href="${item.url}" target="_blank" class="btn btn-go">🔗 AMBIL MOD</a>
+                `;
+                l.prepend(card);
             });
         });
     </script>
