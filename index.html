@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHIKI MODS | V1.0 FINAL</title>
+    <title>SHIKI MODS | V1.1.6 ALL-FILE</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <style>
@@ -21,7 +21,6 @@
         .cmd-box { background: #000; border: 1px solid #444; border-radius: 8px; padding: 10px; text-align: left; font-family: 'Courier New', monospace; font-size: 11px; color: #00ff00; height: 80px; overflow-y: auto; margin: 15px 0; border-left: 3px solid var(--primary); }
         textarea, input { width: 100%; background: #111; border: 1px solid var(--primary); border-radius: 8px; padding: 10px; color: #fff; font-size: 12px; margin-bottom: 10px; box-sizing: border-box; }
 
-        /* FULLSCREEN MODAL UI */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(15px); z-index: 999; flex-direction: column; align-items: center; padding-top: 50px; overflow-y: auto; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; width: 95%; max-width: 420px; margin-bottom: 25px; padding: 0 10px; }
         .close-btn { background: var(--primary); color: #000; border: none; padding: 8px 15px; border-radius: 8px; font-weight: 900; cursor: pointer; }
@@ -29,8 +28,8 @@
         #project-grid { width: 95%; max-width: 420px; display: flex; flex-direction: column; gap: 15px; }
         .shiki-card { background: rgba(188, 19, 254, 0.1); border: 1px solid var(--primary); border-radius: 20px; padding: 20px; text-align: left; position: relative; border-left: 4px solid var(--primary); }
         .badge-shiki { background: rgba(188, 19, 254, 0.2); color: var(--primary); padding: 5px 12px; border-radius: 20px; font-size: 10px; font-weight: bold; border: 1px solid var(--primary); margin-bottom: 10px; display: inline-block; }
-        .card-name { font-size: 18px; font-weight: 900; color: #fff; margin-bottom: 5px; }
-        .btn-dl-shiki { background: var(--primary); color: #000; padding: 8px 18px; border-radius: 8px; text-decoration: none; font-size: 11px; font-weight: bold; float: right; margin-top: -15px; box-shadow: 0 0 10px rgba(188,19,254,0.3); }
+        .card-name { font-size: 16px; font-weight: 900; color: #fff; margin-bottom: 5px; word-break: break-all; }
+        .btn-dl-shiki { background: var(--primary); color: #000; padding: 8px 18px; border-radius: 8px; text-decoration: none; font-size: 11px; font-weight: bold; float: right; margin-top: -10px; }
 
         .store-trigger { width: 95%; max-width: 420px; background: var(--primary); color: #000; font-weight: 900; padding: 15px; border-radius: 12px; margin-bottom: 20px; cursor: pointer; border: none; font-size: 14px; text-transform: uppercase; }
     </style>
@@ -40,7 +39,7 @@
     <div class="container">
         <img src="https://cdn.discordapp.com/attachments/1403306022361235466/1501407305051275285/file_00000000bd78720bb6afdf59771ac3c3.png?ex=69fbf604&is=69faa484&hm=1117233214580a7992f48e3edbb75da66b08f6dcc3a3e8408ed64775d30bb169&" class="profile-img">
         <h1>SHIKI MODS</h1>
-        <div class="cmd-box" id="cmdOut">> System Ready...</div>
+        <div class="cmd-box" id="cmdOut">> Initializing All-File System...</div>
         <div class="links">
             <a href="https://wa.me/6281315151701" class="btn">💬 WhatsApp Personal</a>
             <a href="https://whatsapp.com/channel/0029Vb730uH8kyyTsZ7aO826" class="btn">📢 Saluran Shiki</a>
@@ -59,17 +58,16 @@
     </div>
 
     <div class="section">
-        <div style="color:var(--primary); font-weight:bold; margin-bottom:15px;">🔒 ULTIMATE OBFUSCATOR (FIX COMPLEX)</div>
+        <div style="color:var(--primary); font-weight:bold; margin-bottom:15px;">🔒 ULTIMATE OBFUSCATOR (SAFE ENGINE)</div>
         <input type="file" id="obfFile" accept=".lua">
         <textarea id="obfInput" rows="3" placeholder="Input kode Lua..."></textarea>
         <button class="btn" onclick="obfuscateCode()" style="background:var(--primary); color:#000;">ENCRYPT & DOWNLOAD</button>
     </div>
 
     <div class="section" style="border-style: dashed;">
-        <div style="color:var(--primary); font-weight:bold; margin-bottom:15px;">📤 UPLOAD KE STORE</div>
-        <input type="text" id="scriptName" placeholder="Nama Script...">
-        <input type="file" id="fileInput" accept=".lua">
-        <button class="btn" onclick="uploadFile()" style="background:var(--primary); color:#000;">🚀 UPLOAD SEKARANG</button>
+        <div style="color:var(--primary); font-weight:bold; margin-bottom:15px;">📤 UPLOAD FILE (SUPPORT ZIP, LUA, DLL)</div>
+        <input type="text" id="scriptName" placeholder="Nama Script/Project...">
+        <input type="file" id="fileInput"> <button class="btn" onclick="uploadFile()" style="background:var(--primary); color:#000;">🚀 UPLOAD SEKARANG</button>
     </div>
 
     <script>
@@ -83,78 +81,69 @@
             out.scrollTop = out.scrollHeight;
         }
 
-        function openStore() {
-            document.getElementById("storeModal").style.display = "flex";
-            document.body.style.overflow = "hidden";
-            logCMD("Store UI Activated.");
-        }
-        function closeStore() {
-            document.getElementById("storeModal").style.display = "none";
-            document.body.style.overflow = "auto";
-        }
+        function openStore() { document.getElementById("storeModal").style.display = "flex"; document.body.style.overflow = "hidden"; logCMD("Viewing Shiki Store..."); }
+        function closeStore() { document.getElementById("storeModal").style.display = "none"; document.body.style.overflow = "auto"; }
 
-        // OBFUSCATOR FIX COMPLEX
         function obfuscateCode() {
             const input = document.getElementById("obfInput").value;
-            if(!input) return alert("Isi kodenya nyet!");
+            if(!input) return alert("Isi kodenya puki!");
             let codes = [];
             for (let i = 0; i < input.length; i++) { codes.push(input.charCodeAt(i)); }
             const result = `-- [[ PROTECTED BY SHIKI MODS ]] --\nlocal _v = {${codes.join(',')}}\nlocal _s = ''\nfor i=1, #_v do _s = _s .. string.char(_v[i]) end\nlocal _f = load(_s)\nif _f then _f() end`;
             const blob = new Blob([result], {type: 'text/plain'});
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.href = url; a.download = "Shiki_Enc.lua"; a.click();
-            logCMD("Obfuscation Done.");
+            a.href = url; a.download = "Shiki_Project.lua"; a.click();
         }
 
-        // UPLOAD FIX (AUTO REFRESH UI)
+        // --- GLOBAL UPLOAD (SUPPORT ALL FILES) ---
         function uploadFile() {
             const nameInput = document.getElementById("scriptName");
             const fileInput = document.getElementById("fileInput");
+            const file = fileInput.files[0];
             
-            if(!nameInput.value || !fileInput.files[0]) return alert("Data dongo, lengkapin!");
+            if(!nameInput.value || !file) return alert("Puki ayam, lengkapin!");
             
+            logCMD("Processing file: " + file.name);
             const reader = new FileReader();
+            
+            // Pake DataURL biar bisa handle Binary (ZIP, APK, dll)
             reader.onload = function(e) {
                 db.push().set({
                     name: nameInput.value,
-                    code: e.target.result,
+                    fileName: file.name,
+                    data: e.target.result, // Ini isinya Base64
                     date: new Date().toLocaleDateString()
                 }).then(() => {
-                    logCMD("Successfully added: " + nameInput.value);
-                    alert("Berhasil masuk kumpulan Shiki!");
-                    nameInput.value = ""; // Bersihin input
-                    fileInput.value = ""; // Bersihin input
+                    logCMD("Upload Success: " + file.name);
+                    alert("File berhasil masuk Store!");
+                    nameInput.value = "";
+                    fileInput.value = "";
                 });
             };
-            reader.readAsText(fileInput.files[0]);
+            reader.readAsDataURL(file);
         }
 
-        // REAL-TIME LISTENING (INI YANG BIKIN AUTO MUNCUL)
+        // --- REAL-TIME DISPLAY ---
         db.on("value", (snap) => {
             const grid = document.getElementById("project-grid");
-            grid.innerHTML = ""; // Hapus list lama
-            
-            if(!snap.exists()) {
-                grid.innerHTML = "<div style='color:#888;'>Belum ada script di-upload...</div>";
-                return;
-            }
+            grid.innerHTML = ""; 
+            if(!snap.exists()) return grid.innerHTML = "<div style='color:#888;'>Kosong nyet...</div>";
 
             snap.forEach((child) => {
-                const data = child.val();
+                const item = child.val();
                 const card = document.createElement("div");
                 card.className = "shiki-card";
                 card.innerHTML = `
-                    <div class="badge-shiki">💎 SHIKI SCRIPT</div>
-                    <a href="data:text/plain;charset=utf-8,${encodeURIComponent(data.code)}" download="${data.name}.lua" class="btn-dl-shiki">GET</a>
-                    <div class="card-name">${data.name}</div>
-                    <div style="font-size:10px; color:#aaa;">Author: SHIKI | Released: ${data.date}</div>
+                    <div class="badge-shiki">💎 ALL-FILE SUPPORT</div>
+                    <a href="${item.data}" download="${item.fileName || 'file.zip'}" class="btn-dl-shiki">DOWNLOAD</a>
+                    <div class="card-name">${item.name}</div>
+                    <div style="font-size:10px; color:#aaa;">File: ${item.fileName || 'Unknown'} | ${item.date}</div>
                 `;
-                grid.prepend(card); // Yang baru di atas
+                grid.prepend(card);
             });
-            logCMD("Store List Updated.");
+            logCMD("Store List Synchronized.");
         });
     </script>
 </body>
 </html>
-
