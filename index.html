@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHIKI MARKET V29.0</title>
+    <title>SHIKI MODS V1.0</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
@@ -31,7 +31,7 @@
 </head>
 <body>
 
-    <div class="header"><h1>SHIKI MARKET</h1></div>
+    <div class="header"><h1>SHIKI MODS</h1></div>
 
     <div class="nav-tabs">
         <div class="tab active" onclick="switchTab('store', this)">🛒 MONETLOADER</div>
@@ -44,7 +44,7 @@
     <div id="social" class="container">
         <div class="form-box" style="text-align: center;">
             <h3 style="color:var(--primary);">SOCIAL MEDIA</h3>
-            <a href="http://googleusercontent.com/youtube.com/4" target="_blank" class="btn btn-go" style="background:#ff0000; color:#fff;">📺 YOUTUBE CHANNEL</a>
+            <a href="http://googleusercontent.com/youtube.com/5" target="_blank" class="btn btn-go" style="background:#ff0000; color:#fff;">📺 YOUTUBE CHANNEL</a>
             <a href="https://whatsapp.com/channel/0029Vb730uH8kyyTsZ7aO826" target="_blank" class="btn btn-go" style="background:#25d366; color:#fff;">📢 SALURAN WA</a>
         </div>
     </div>
@@ -54,25 +54,21 @@
             <h3 style="color:var(--primary); margin:0 0 10px 0;">➕ UPLOAD MOD</h3>
             <label>Nama Mod:</label>
             <input type="text" id="name" placeholder="Contoh: Mod No Grass">
-            
-            <label>Harga (Ketik FREE atau Nominal):</label>
+            <label>Harga (FREE atau Nominal):</label>
             <input type="text" id="price" placeholder="Contoh: 20k / FREE">
-
             <label>Foto Preview (Bukti Monet):</label>
             <input type="file" id="imageFile" accept="image/*">
-
             <label>Link File (Opsional):</label>
             <input type="text" id="url" placeholder="Paste link kalau ada">
-            
             <label>Atau Upload File Langsung:</label>
             <input type="file" id="modFile">
-
             <button class="btn btn-go" onclick="startUpload()">🚀 UPLOAD</button>
             <div id="upload-status"></div>
         </div>
     </div>
 
     <script>
+        // --- DATA LU UDAH GUA FIX MEK ---
         const ADMIN_PASSWORD = "shiki123"; 
         const NOMOR_WA = "6281315151701"; 
 
@@ -81,7 +77,7 @@
             authDomain: "shiki-mods.firebaseapp.com",
             projectId: "shiki-mods",
             databaseURL: "https://shiki-mods-default-rtdb.asia-southeast1.firebasedatabase.app",
-            storageBucket: "shiki-mods.appspot.com", // SESUAIKAN DENGAN CONSOLE LU
+            storageBucket: "shiki-mods.firebasestorage.app", // FIX SESUAI FOTO LU
             appId: "1:407754298344:web:002f0c7033e59f9f9a0a5d"
         };
 
@@ -94,7 +90,7 @@
                 if (prompt("PASSWORD ADMIN:") !== ADMIN_PASSWORD) return alert("SALAH MEK!");
             }
             document.querySelectorAll('.container').forEach(c => c.classList.remove('active'));
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(t => t.forEach(t => t.classList.remove('active')));
             document.getElementById(id).classList.add('active');
             el.classList.add('active');
         }
@@ -109,39 +105,38 @@
 
             if(!name || !price) return alert("Nama & Harga wajib isi!");
 
-            status.innerText = "⏳ Sedang mengupload, sabar mek...";
+            status.innerText = "⏳ Sedang mengupload foto & file...";
 
             let finalImgUrl = "";
             let finalModUrl = manualUrl;
 
             try {
-                // Upload Foto Preview
                 if(imgFile) {
                     const imgRef = storage.child('previews/' + Date.now() + "_" + imgFile.name);
-                    await imgRef.put(imgFile);
-                    finalImgUrl = await imgRef.getDownloadURL();
+                    const snapImg = await imgRef.put(imgFile);
+                    finalImgUrl = await snapImg.ref.getDownloadURL();
                 }
 
-                // Upload File Mod (Kalau ada)
                 if(modFile) {
                     const modRef = storage.child('files/' + Date.now() + "_" + modFile.name);
-                    await modRef.put(modFile);
-                    finalModUrl = await modRef.getDownloadURL();
+                    const snapMod = await modRef.put(modFile);
+                    finalModUrl = await snapMod.ref.getDownloadURL();
                 }
 
-                db.push().set({
+                await db.push().set({
                     name: name,
                     price: price,
                     img: finalImgUrl,
                     url: finalModUrl,
                     time: Date.now()
-                }).then(() => {
-                    alert("Berhasil Terbit!");
-                    location.reload();
                 });
 
+                alert("Berhasil Terbit!");
+                location.reload();
+
             } catch (e) {
-                alert("Gagal Upload! Cek kuota storage lu.");
+                console.error(e);
+                alert("GAGAL: " + e.message + " | Cek Rules Storage lu puki!");
                 status.innerText = "";
             }
         }
@@ -155,8 +150,7 @@
                 const item = child.val();
                 const hargaLower = item.price.toLowerCase();
                 const isFree = (hargaLower === "free" || hargaLower === "0" || hargaLower === "gratis");
-                
-                const btnLink = isFree ? item.url : `https://wa.me/${NOMOR_WA}?text=${encodeURIComponent('Halo Bang, mau beli Mod: *'+item.name+'* seharga *'+item.price+'*')}`;
+                const btnLink = isFree ? item.url : `https://wa.me/${NOMOR_WA}?text=${encodeURIComponent('Halo Bang Shiki, mau beli Mod: *'+item.name+'* seharga *'+item.price+'*')}`;
                 const btnTeks = isFree ? "🔗 AMBIL MOD (FREE)" : "💳 BELI SEKARANG";
 
                 l.innerHTML = `
