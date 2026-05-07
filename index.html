@@ -3,30 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHIKI MARKET V29.0</title>
+    <title>SHIKII MODS V31.0</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #00ff88; --bg: #050208; --card: rgba(15, 15, 25, 0.95); --gold: #ffd700; --yt: #ff0000; --wa: #25d366; }
+        :root { --primary: #00ff88; --bg: #050208; --card: rgba(15, 15, 25, 0.95); --gold: #ffd700; }
         body { background: var(--bg); color: #fff; font-family: 'Poppins', sans-serif; margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-        .header h1 { font-family: 'Orbitron', sans-serif; font-size: 24px; color: var(--primary); text-shadow: 0 0 10px var(--primary); margin: 15px 0; }
-        .nav-tabs { display: flex; gap: 5px; margin-bottom: 20px; width: 100%; max-width: 400px; }
-        .tab { flex: 1; padding: 12px 2px; text-align: center; background: var(--card); border-radius: 8px; cursor: pointer; border: 1px solid #333; font-weight: bold; font-size: 10px; }
-        .tab.active { background: var(--primary); color: #000; box-shadow: 0 0 10px var(--primary); }
+        .header h1 { font-family: 'Orbitron', sans-serif; font-size: 22px; color: var(--primary); text-shadow: 0 0 10px var(--primary); margin: 15px 0; }
+        .nav-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-bottom: 10px; width: 100%; max-width: 400px; }
+        .tab { padding: 12px 2px; text-align: center; background: var(--card); border-radius: 8px; cursor: pointer; border: 1px solid #333; font-weight: bold; font-size: 10px; color: #fff; }
+        .tab.active { background: var(--primary); color: #000; box-shadow: 0 0 10px var(--primary); border-color: var(--primary); }
         .container { width: 100%; max-width: 400px; display: none; }
         .container.active { display: block; }
         .item-card { background: var(--card); border-radius: 15px; overflow: hidden; margin-bottom: 15px; border: 1px solid #222; }
         .preview-img { width: 100%; height: 180px; object-fit: cover; background: #111; border-bottom: 2px solid var(--primary); }
         .card-body { padding: 15px; }
         .price { color: var(--gold); font-weight: 900; font-size: 18px; margin: 5px 0; }
-        .btn { display: block; width: 100%; padding: 12px; text-align: center; border-radius: 8px; text-decoration: none; font-weight: 900; margin-top: 10px; cursor: pointer; border: none; text-transform: uppercase; box-sizing: border-box; font-size: 13px; }
+        .btn { display: block; width: 100%; padding: 12px; text-align: center; border-radius: 8px; text-decoration: none; font-weight: 900; margin-top: 10px; cursor: pointer; border: none; text-transform: uppercase; box-sizing: border-box; font-size: 12px; }
         .btn-go { background: var(--primary); color: #000; }
         .form-box { background: var(--card); padding: 15px; border-radius: 15px; border: 1px dashed var(--primary); }
-        label { display: block; font-size: 11px; color: var(--primary); margin-bottom: 5px; font-weight: bold; }
-        input { width: 100%; padding: 10px; margin-bottom: 12px; background: #000; border: 1px solid #333; color: #fff; border-radius: 8px; box-sizing: border-box; font-size: 12px; }
-        #upload-status { font-size: 10px; color: var(--gold); text-align: center; margin-top: 10px; }
+        textarea, input { width: 100%; padding: 10px; margin-bottom: 12px; background: #000; border: 1px solid #333; color: var(--primary); border-radius: 8px; box-sizing: border-box; font-family: monospace; }
     </style>
 </head>
 <body>
@@ -34,140 +32,119 @@
     <div class="header"><h1>SHIKII MODS</h1></div>
 
     <div class="nav-tabs">
-        <div class="tab active" onclick="switchTab('store', this)">🛒 MONETLOADER</div>
-        <div class="tab" onclick="switchTab('social', this)">📱 MEDSOS SHIKII</div>
+        <div class="tab active" onclick="switchTab('free', this)">🆓 GRATIS</div>
+        <div class="tab" onclick="switchTab('premium', this)">💰 PREMIUM</div>
+        <div class="tab" onclick="switchTab('obfus', this)">🔐 OBFUSCATOR</div>
+        <div class="tab" onclick="switchTab('social', this)">📱 MEDSOS</div>
         <div class="tab" onclick="switchTab('admin', this)">🛠️ ADMIN</div>
     </div>
 
-    <div id="store" class="container active"><div id="list"></div></div>
+    <div id="free" class="container active"><div id="list-free"></div></div>
+    <div id="premium" class="container"><div id="list-premium"></div></div>
+
+    <div id="obfus" class="container">
+        <div class="form-box">
+            <h3 style="color:var(--primary); margin:0;">🔐 LUA OBFUSCATOR</h3>
+            <p style="font-size:10px; color:#aaa;">Proteksi script .lua lu biar gak dicolong!</p>
+            <textarea id="luaInput" rows="8" placeholder="Paste script LUA lu di sini..."></textarea>
+            <button class="btn btn-go" onclick="obfuscateLua()">🔒 ENKRIPSI SEKARANG</button>
+            <div id="obfusResult" style="display:none; margin-top:15px;">
+                <label style="font-size:10px; color:var(--primary);">Hasil (Copy ini):</label>
+                <textarea id="luaOutput" rows="8" readonly></textarea>
+            </div>
+        </div>
+    </div>
 
     <div id="social" class="container">
         <div class="form-box" style="text-align: center;">
             <h3 style="color:var(--primary);">SOCIAL MEDIA</h3>
-            <a href="https://youtube.com/@mlanz04?si=l8h6KQljj2CLa24j" target="_blank" class="btn btn-go" style="background:#ff0000; color:#fff;">📺 YOUTUBE SHIKII</a>
-            <a href="https://whatsapp.com/channel/0029Vb730uH8kyyTsZ7aO826" target="_blank" class="btn btn-go" style="background:#25d366; color:#fff;">📢 SALURAN SHIKII</a>
+            <a href="https://youtube.com/@mlanz04?si=0Xzs632rXnQkNCow" target="_blank" class="btn btn-go" style="background:#ff0000; color:#fff;">📺 YOUTUBE</a>
+            <a href="https://whatsapp.com/channel/0029Vb730uH8kyyTsZ7aO826" target="_blank" class="btn btn-go" style="background:#25d366; color:#fff;">📢 SALURAN WA</a>
         </div>
     </div>
 
     <div id="admin" class="container">
         <div class="form-box">
-            <h3 style="color:var(--primary); margin:0 0 10px 0;">➕ UPLOAD MOD</h3>
-            <label>Nama Mod:</label>
-            <input type="text" id="name" placeholder="Contoh: Mod No Grass">
-            
-            <label>Harga (Ketik FREE atau Nominal):</label>
-            <input type="text" id="price" placeholder="Contoh: 20k / FREE">
-
-            <label>Foto Preview (Bukti Monet):</label>
+            <h3 style="color:var(--primary);">➕ UPLOAD</h3>
+            <input type="text" id="name" placeholder="Nama Mod">
+            <input type="text" id="price" placeholder="Harga (Contoh: FREE / 10k)">
             <input type="file" id="imageFile" accept="image/*">
-
-            <label>Link File (Opsional):</label>
-            <input type="text" id="url" placeholder="Paste link kalau ada">
-            
-            <label>Atau Upload File Langsung:</label>
-            <input type="file" id="modFile">
-
-            <button class="btn btn-go" onclick="startUpload()">🚀 PUBLISH SEKARANG</button>
-            <div id="upload-status"></div>
+            <input type="text" id="url" placeholder="Link Download">
+            <button class="btn btn-go" onclick="startUpload()">🚀 PUBLISH</button>
         </div>
     </div>
 
     <script>
-        const ADMIN_PASSWORD = "hamlanmaulana"; 
-        const NOMOR_WA = "6281315151701"; 
-
         const firebaseConfig = {
             apiKey: "AIzaSyBrcjH0HfMDAsjaFZkXodZJtEXegbD1R9w",
             authDomain: "shiki-mods.firebaseapp.com",
             projectId: "shiki-mods",
             databaseURL: "https://shiki-mods-default-rtdb.asia-southeast1.firebasedatabase.app",
-            storageBucket: "shiki-mods.appspot.com", // SESUAIKAN DENGAN CONSOLE LU
+            storageBucket: "shiki-mods.firebasestorage.app",
             appId: "1:407754298344:web:002f0c7033e59f9f9a0a5d"
         };
-
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database().ref("shiki_market_links");
         const storage = firebase.storage().ref();
 
         function switchTab(id, el) {
-            if (id === 'admin') {
-                if (prompt("PASSWORD ADMIN:") !== ADMIN_PASSWORD) return alert("SALAH MEK!");
-            }
-            document.querySelectorAll('.container').forEach(c => c.classList.remove('active'));
+            if (id === 'admin' && prompt("PASSWORD ADMIN:") !== "hamlanmaulana") return;
+            document.querySelectorAll('.container').forEach(c => c.style.display = 'none');
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
+            document.getElementById(id).style.display = 'block';
             el.classList.add('active');
+        }
+
+        // --- FUNGSI OBFUSCATOR ---
+        function obfuscateLua() {
+            const input = document.getElementById("luaInput").value;
+            if(!input) return alert("Isi scriptnya dulu nyet!");
+            
+            // Logika Enkripsi ByteCode Sederhana (Android Work)
+            const bytes = [];
+            for (let i = 0; i < input.length; i++) {
+                bytes.push(input.charCodeAt(i) + 13); // Geser bit dikit biar pusing
+            }
+            
+            const encoded = "local _ = '" + bytes.join(",") + "'; load(function(s) local r = ''; for i in s:gmatch('%d+') do r = r .. string.char(tonumber(i)-13) end return r end(_))()";
+            
+            document.getElementById("luaOutput").value = "--[ ENCRYPTED BY SHIKII ]--\n" + encoded;
+            document.getElementById("obfusResult").style.display = "block";
         }
 
         async function startUpload() {
             const name = document.getElementById("name").value;
             const price = document.getElementById("price").value;
             const imgFile = document.getElementById("imageFile").files[0];
-            const modFile = document.getElementById("modFile").files[0];
-            const manualUrl = document.getElementById("url").value;
-            const status = document.getElementById("upload-status");
-
-            if(!name || !price) return alert("Nama & Harga wajib isi!");
-
-            status.innerText = "⏳ Sedang mengupload, sabar mek...";
-
-            let finalImgUrl = "";
-            let finalModUrl = manualUrl;
-
+            const url = document.getElementById("url").value;
+            if(!name || !price) return alert("Isi data!");
             try {
-                // Upload Foto Preview
+                let imgUrl = "";
                 if(imgFile) {
-                    const imgRef = storage.child('previews/' + Date.now() + "_" + imgFile.name);
-                    await imgRef.put(imgFile);
-                    finalImgUrl = await imgRef.getDownloadURL();
+                    const snap = await storage.child('previews/'+Date.now()).put(imgFile);
+                    imgUrl = await snap.ref.getDownloadURL();
                 }
-
-                // Upload File Mod (Kalau ada)
-                if(modFile) {
-                    const modRef = storage.child('files/' + Date.now() + "_" + modFile.name);
-                    await modRef.put(modFile);
-                    finalModUrl = await modRef.getDownloadURL();
-                }
-
-                db.push().set({
-                    name: name,
-                    price: price,
-                    img: finalImgUrl,
-                    url: finalModUrl,
-                    time: Date.now()
-                }).then(() => {
-                    alert("Berhasil Terbit!");
-                    location.reload();
-                });
-
-            } catch (e) {
-                alert("Gagal Upload! Cek kuota storage lu.");
-                status.innerText = "";
-            }
+                await db.push().set({ name, price, img: imgUrl, url, time: Date.now() });
+                alert("Berhasil!"); location.reload();
+            } catch (e) { alert(e.message); }
         }
 
         db.on("value", (snap) => {
-            const l = document.getElementById("list");
-            l.innerHTML = ""; 
-            if(!snap.exists()) return l.innerHTML = "<p style='text-align:center;'>Market Kosong...</p>";
-
+            const f = document.getElementById("list-free"); const p = document.getElementById("list-premium");
+            f.innerHTML = ""; p.innerHTML = "";
             snap.forEach((child) => {
-                const item = child.val();
-                const hargaLower = item.price.toLowerCase();
-                const isFree = (hargaLower === "free" || hargaLower === "0" || hargaLower === "gratis");
-                
-                const btnLink = isFree ? item.url : `https://wa.me/${NOMOR_WA}?text=${encodeURIComponent('Halo Bang, mau beli Mod: *'+item.name+'* seharga *'+item.price+'*')}`;
-                const btnTeks = isFree ? "🔗 AMBIL MOD (FREE)" : "💳 BELI SEKARANG";
-
-                l.innerHTML = `
-                    <div class="item-card">
-                        ${item.img ? `<img src="${item.img}" class="preview-img">` : ''}
-                        <div class="card-body">
-                            <div style="font-weight:900; font-size:18px;">${item.name}</div>
-                            <div class="price">${item.price}</div>
-                            <a href="${btnLink}" target="_blank" class="btn btn-go">${btnTeks}</a>
-                        </div>
-                    </div>` + l.innerHTML;
+                const i = child.val();
+                const isFree = i.price.toLowerCase().includes("free");
+                const card = `
+                <div class="item-card">
+                    ${i.img ? `<img src="${i.img}" class="preview-img">` : ''}
+                    <div class="card-body">
+                        <div style="font-weight:900;">${i.name}</div>
+                        <div class="price">${i.price}</div>
+                        <a href="${isFree ? i.url : 'https://wa.me/6281315151701?text=Beli '+i.name}" target="_blank" class="btn btn-go">${isFree ? '🔗 AMBIL' : '💳 BELI'}</a>
+                    </div>
+                </div>`;
+                if(isFree) f.innerHTML = card + f.innerHTML; else p.innerHTML = card + p.innerHTML;
             });
         });
     </script>
