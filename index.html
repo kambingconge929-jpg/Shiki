@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHIKII MODS V31.0</title>
+    <title>SHIKII MODS V33.0</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
@@ -23,8 +23,10 @@
         .price { color: var(--gold); font-weight: 900; font-size: 18px; margin: 5px 0; }
         .btn { display: block; width: 100%; padding: 12px; text-align: center; border-radius: 8px; text-decoration: none; font-weight: 900; margin-top: 10px; cursor: pointer; border: none; text-transform: uppercase; box-sizing: border-box; font-size: 12px; }
         .btn-go { background: var(--primary); color: #000; }
+        .btn-dl { background: var(--gold); color: #000; display: none; }
         .form-box { background: var(--card); padding: 15px; border-radius: 15px; border: 1px dashed var(--primary); }
         textarea, input { width: 100%; padding: 10px; margin-bottom: 12px; background: #000; border: 1px solid #333; color: var(--primary); border-radius: 8px; box-sizing: border-box; font-family: monospace; }
+        .file-label { display: block; background: #111; padding: 10px; border-radius: 8px; border: 1px solid #333; text-align: center; font-size: 11px; cursor: pointer; color: var(--primary); margin-bottom: 10px; }
     </style>
 </head>
 <body>
@@ -44,28 +46,33 @@
 
     <div id="obfus" class="container">
         <div class="form-box">
-            <h3 style="color:var(--primary); margin:0;">🔐 LUA OBFUSCATOR</h3>
-            <p style="font-size:10px; color:#aaa;">Proteksi script .lua lu biar gak dicolong!</p>
-            <textarea id="luaInput" rows="8" placeholder="Paste script LUA lu di sini..."></textarea>
-            <button class="btn btn-go" onclick="obfuscateLua()">🔒 ENKRIPSI SEKARANG</button>
-            <div id="obfusResult" style="display:none; margin-top:15px;">
-                <label style="font-size:10px; color:var(--primary);">Hasil (Copy ini):</label>
-                <textarea id="luaOutput" rows="8" readonly></textarea>
-            </div>
+            <h3 style="color:var(--primary); margin:0;">🔐 LUA OBFUSCATOR V3</h3>
+            <p style="font-size:10px; color:#aaa; margin-bottom:15px;">Proteksi script dengan tombol download manual!</p>
+            
+            <label class="file-label" for="luaFile">📂 PILIH FILE .LUA</label>
+            <input type="file" id="luaFile" accept=".lua" style="display:none;" onchange="handleLuaFile(this)">
+            
+            <textarea id="luaInput" rows="5" placeholder="Atau paste script LUA di sini..."></textarea>
+            
+            <button class="btn btn-go" onclick="obfuscateLua()">🔒 MULAI ENKRIPSI</button>
+            
+            <button id="dlBtn" class="btn btn-dl" onclick="downloadResult()">📥 DOWNLOAD HASIL</button>
+            
+            <div id="obfusStatus" style="text-align:center; font-size:10px; color:var(--primary); margin-top:10px;"></div>
         </div>
     </div>
 
     <div id="social" class="container">
         <div class="form-box" style="text-align: center;">
             <h3 style="color:var(--primary);">SOCIAL MEDIA</h3>
-            <a href="https://youtube.com/@mlanz04?si=0Xzs632rXnQkNCow" target="_blank" class="btn btn-go" style="background:#ff0000; color:#fff;">📺 YOUTUBE</a>
+            <a href="https://youtube.com/@mlanz04?si=X2BqoWyDMRE1MyGy" target="_blank" class="btn btn-go" style="background:#ff0000; color:#fff;">📺 YOUTUBE</a>
             <a href="https://whatsapp.com/channel/0029Vb730uH8kyyTsZ7aO826" target="_blank" class="btn btn-go" style="background:#25d366; color:#fff;">📢 SALURAN WA</a>
         </div>
     </div>
 
     <div id="admin" class="container">
         <div class="form-box">
-            <h3 style="color:var(--primary);">➕ UPLOAD</h3>
+            <h3 style="color:var(--primary);">➕ UPLOAD MOD</h3>
             <input type="text" id="name" placeholder="Nama Mod">
             <input type="text" id="price" placeholder="Harga (Contoh: FREE / 10k)">
             <input type="file" id="imageFile" accept="image/*">
@@ -75,6 +82,10 @@
     </div>
 
     <script>
+        const ADMIN_PASSWORD = "hamlanmaulana"; 
+        const NOMOR_WA = "6281315151701"; 
+        let obfuscatedContent = ""; // Simpan hasil enkripsi di sini
+
         const firebaseConfig = {
             apiKey: "AIzaSyBrcjH0HfMDAsjaFZkXodZJtEXegbD1R9w",
             authDomain: "shiki-mods.firebaseapp.com",
@@ -88,28 +99,50 @@
         const storage = firebase.storage().ref();
 
         function switchTab(id, el) {
-            if (id === 'admin' && prompt("PASSWORD ADMIN:") !== "hamlanmaulana") return;
+            if (id === 'admin' && prompt("PASSWORD ADMIN:") !== ADMIN_PASSWORD) return;
             document.querySelectorAll('.container').forEach(c => c.style.display = 'none');
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.getElementById(id).style.display = 'block';
             el.classList.add('active');
         }
 
-        // --- FUNGSI OBFUSCATOR ---
+        function handleLuaFile(input) {
+            const file = input.files[0];
+            const reader = new FileReader();
+            reader.onload = (e) => { document.getElementById("luaInput").value = e.target.result; };
+            reader.readAsText(file);
+        }
+
         function obfuscateLua() {
             const input = document.getElementById("luaInput").value;
-            if(!input) return alert("Isi scriptnya dulu nyet!");
+            if(!input) return alert("Pilih file atau paste script dulu!");
             
-            // Logika Enkripsi ByteCode Sederhana (Android Work)
+            const status = document.getElementById("obfusStatus");
+            const dlBtn = document.getElementById("dlBtn");
+            
+            status.innerText = "⏳ Sedang memproses...";
+            dlBtn.style.display = "none";
+
+            // Proses Enkripsi
             const bytes = [];
-            for (let i = 0; i < input.length; i++) {
-                bytes.push(input.charCodeAt(i) + 13); // Geser bit dikit biar pusing
-            }
-            
-            const encoded = "local _ = '" + bytes.join(",") + "'; load(function(s) local r = ''; for i in s:gmatch('%d+') do r = r .. string.char(tonumber(i)-13) end return r end(_))()";
-            
-            document.getElementById("luaOutput").value = "--[ ENCRYPTED BY SHIKII ]--\n" + encoded;
-            document.getElementById("obfusResult").style.display = "block";
+            for (let i = 0; i < input.length; i++) { bytes.push(input.charCodeAt(i) + 13); }
+            obfuscatedContent = `--[ ENCRYPTED BY SHIKII ]--\nlocal _ = '${bytes.join(",")}'; load(function(s) local r = ''; for i in s:gmatch('%d+') do r = r .. string.char(tonumber(i)-13) end return r end(_))()`;
+
+            setTimeout(() => {
+                status.innerText = "✅ Berhasil Di-Enkripsi!";
+                dlBtn.style.display = "block"; // Munculin tombol download
+            }, 800);
+        }
+
+        function downloadResult() {
+            if(!obfuscatedContent) return;
+            const blob = new Blob([obfuscatedContent], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'SHIKII_PROTECTED.lua';
+            a.click();
+            window.URL.revokeObjectURL(url);
         }
 
         async function startUpload() {
@@ -135,13 +168,16 @@
             snap.forEach((child) => {
                 const i = child.val();
                 const isFree = i.price.toLowerCase().includes("free");
+                const waText = `BANG SHIKI GUA MAU BUY ${i.name.toUpperCase()}`;
+                const btnLink = isFree ? i.url : `https://wa.me/${NOMOR_WA}?text=${encodeURIComponent(waText)}`;
+                
                 const card = `
                 <div class="item-card">
                     ${i.img ? `<img src="${i.img}" class="preview-img">` : ''}
                     <div class="card-body">
                         <div style="font-weight:900;">${i.name}</div>
                         <div class="price">${i.price}</div>
-                        <a href="${isFree ? i.url : 'https://wa.me/6281315151701?text=Beli '+i.name}" target="_blank" class="btn btn-go">${isFree ? '🔗 AMBIL' : '💳 BELI'}</a>
+                        <a href="${btnLink}" target="_blank" class="btn btn-go">${isFree ? '🔗 AMBIL' : '💳 BELI'}</a>
                     </div>
                 </div>`;
                 if(isFree) f.innerHTML = card + f.innerHTML; else p.innerHTML = card + p.innerHTML;
